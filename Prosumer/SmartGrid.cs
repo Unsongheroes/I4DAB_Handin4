@@ -11,7 +11,7 @@ namespace Prosumer
         public int SmartGridId { get; set; }
         public string Name { get; set; }
         public int PowerBalance { get; set; }
-        public List<Prosumer> prosumers { get; set; }
+        public List<string> ProsumerId { get; set; }
 
     }
 }

@@ -9,7 +9,7 @@ namespace Prosumer
     public class Prosumer
     {
         //primary key
-        public int ProsumerId { get; }
+        public string ProsumerId { get; }
         //bit coin key
         public string PublicKey { get; set; }
         //"Virksomhed" el. "Person"

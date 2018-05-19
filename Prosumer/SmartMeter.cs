@@ -9,7 +9,7 @@ namespace Prosumer
     public class SmartMeter
     {
         public int SmartMeterId { get; set; }
-        public int generatedPower{get; set;}
+        public int GeneratedPower{get; set;}
         public int UsedPower { get; set; }
     }
 }

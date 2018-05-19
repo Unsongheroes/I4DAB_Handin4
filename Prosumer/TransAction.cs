@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Prosumer
 {
-    class TransAction
+    class Transaction
     {
+        public string TraderId { get; set; }
+        public int AmountOfPower { get; set; }
+        public int BuyingPosumerId { get; set; }
+        public int BuyingFromPosumerId { get; set; }
+
     }
 }

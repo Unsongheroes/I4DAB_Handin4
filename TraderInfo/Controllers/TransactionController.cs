@@ -15,6 +15,11 @@ namespace TraderInfo.Controllers
     {
         private TransactionRepository _transactionContext = new TransactionRepository();
 
+        public TransactionController(TransactionRepository context)
+        {
+            _transactionContext = context;
+        }
+
         // GET: api/Transaction
         [HttpGet(Name = "GetAll")]
         [ProducesResponseType(200, Type = typeof(Transaction))]

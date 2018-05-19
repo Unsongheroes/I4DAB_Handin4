@@ -38,7 +38,6 @@ namespace TraderInfo
             }
 
             app.UseStaticFiles();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

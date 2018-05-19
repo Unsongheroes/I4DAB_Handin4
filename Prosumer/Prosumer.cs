@@ -13,7 +13,6 @@ namespace Prosumer
         public string Name { get; set; }
         //"Virksomhed" el. "Person"
         public string Type { get; set; }
-        public int GeneratedPower { get; set; }
-        public int UsedPower { get; set; }
+        public SmartMeter SmartMeter { get; set; }
     }
 }

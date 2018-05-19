@@ -8,10 +8,11 @@ namespace Prosumer
 {
     class Transaction
     {
-        public string TraderId { get; set; }
-        public int AmountOfPower { get; set; }
+        public string TradeId { get; set; }
+        public int AmountOfPowerBought { get; set; }
         public int BuyingPosumerId { get; set; }
-        public int BuyingFromPosumerId { get; set; }
+        public int SellingPosumerId { get; set; }
+        public bool Spent { get; set; }
 
     }
 }

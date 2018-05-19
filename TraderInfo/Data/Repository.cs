@@ -45,11 +45,7 @@ namespace TraderInfo.Data
             }
             catch (DocumentClientException e)
             {
-                if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    return null;
-                else
-                    throw;
-
+                return null;
             }
         }
 
@@ -106,12 +102,9 @@ namespace TraderInfo.Data
             {
                 Client.ReadDatabaseAsync(UriFactory.CreateDatabaseUri(NewDatabaseId)).Wait();
             }
-            catch (DocumentClientException e)
+            catch (AggregateException e)
             {
-                if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    Client.CreateDatabaseAsync(new Database() { Id = NewDatabaseId }).Wait();
-                else
-                    throw;
+                Client.CreateDatabaseAsync(new Database() { Id = NewDatabaseId }).Wait();
             }
         }
 
@@ -122,12 +115,9 @@ namespace TraderInfo.Data
                 Client.ReadDocumentCollectionAsync(
                     UriFactory.CreateDocumentCollectionUri(NewDatabaseId, NewCollectionId)).Wait();
             }
-            catch (DocumentClientException e)
+            catch (AggregateException e)
             {
-                if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
-                    Client.CreateDocumentCollectionAsync(UriFactory.CreateDatabaseUri(NewDatabaseId), new DocumentCollection() {Id = NewCollectionId});
-                else
-                    throw;
+               Client.CreateDocumentCollectionAsync(UriFactory.CreateDatabaseUri(NewDatabaseId), new DocumentCollection() {Id = NewCollectionId});
             }
         }
         

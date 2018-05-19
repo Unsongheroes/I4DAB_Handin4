@@ -10,7 +10,8 @@ namespace Prosumer
     {
         //primary key
         public int ProsumerId { get; }
-        public string Name { get; set; }
+        //bit coin key
+        public string PublicKey { get; set; }
         //"Virksomhed" el. "Person"
         public string Type { get; set; }
         public SmartMeter SmartMeter { get; set; }

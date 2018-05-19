@@ -45,6 +45,7 @@
     <Compile Include="SmartGrid.cs" />
     <Compile Include="SmartMeter.cs" />
     <Compile Include="Trader.cs" />
+    <Compile Include="TransAction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -17,9 +17,13 @@ namespace SmartgridInfo.Repository
 
         protected static IDocumentClient Client;
 
-        protected static string PrimaryAuthenticationKey = "vmbfFVnIqKYcdYCVRqHXDpkqh471dqeELczO4rbVKoYpI5NUJ4D34DegxTFTS4FhNiCw6B477WVqhjqNABSdow==";
-        protected static string SecondaryAuthenticationKey = "diJbYp8LfHiSYnivAxe5ev6yIvP87iIEsH42XRkRjmX4GdxBJS73Xl3O7qx1gC33R32LBkxFhQfKkppw2uy1mQ==";
-        protected static string ServiceEndPoint = "https://f18i4dab.documents.azure.com:443/";
+
+        //Online: vmbfFVnIqKYcdYCVRqHXDpkqh471dqeELczO4rbVKoYpI5NUJ4D34DegxTFTS4FhNiCw6B477WVqhjqNABSdow==
+        //local: C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==
+        protected static string PrimaryAuthenticationKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
+        //Online: https://f18i4dab.documents.azure.com:443/
+        //Local: https://localhost:8081/
+        protected static string ServiceEndPoint = "https://localhost:8081/";
 
         public Repository( string databaseId, string collectionId, IDocumentClient documentClient)
         {

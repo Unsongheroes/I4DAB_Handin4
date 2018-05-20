@@ -87,10 +87,10 @@ namespace SmartgridInfo.Repository
 
         public async Task<T> CreateItemAsync(T item)
         {
-            Document document =
-                await Client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(NewDatabaseId, NewCollectionId),
-                    item);
-            return (T) (dynamic) document;
+                Document document =
+                    await Client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(NewDatabaseId, NewCollectionId),
+                        item);
+                return (T)(dynamic)document;
         }
 
         public async Task DeleteItemAsync(string id)

@@ -95,10 +95,13 @@ namespace TraderInfo.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(string id)
         {
-            var result = _transactionContext.DeleteItemAsync(id);
-
+            var result = await _transactionContext.GetItemAsync(id);
+            
             if (result != null)
+            {
+                await _transactionContext.DeleteItemAsync(id);
                 return Ok(id);
+            }
             else
                 return NotFound();
         }

@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProsumerInfo.Data;
+using ProsumerInfo.Interfaces;
 using ProsumerInfo.Models;
+using ProsumerInfo.Models.Dtos;
 
 namespace ProsumerInfo.Controllers
 {
@@ -13,18 +16,21 @@ namespace ProsumerInfo.Controllers
     [Route("api/Prosumers")]
     public class ProsumersController : Controller
     {
-        private readonly ProsumerInfoContext _context;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IDtoFactory _dtoFactory;
 
-        public ProsumersController(ProsumerInfoContext context)
+        public ProsumersController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
+            _dtoFactory = new DtoFactory();
         }
 
         // GET: api/Prosumers
         [HttpGet]
-        public IEnumerable<Prosumer> GetProsumer()
+        public async Task<IEnumerable<ProsumerDto>> GetProsumer()
         {
-            return _context.Prosumers;
+            var result = await _unitOfWork.Prosumers.GetAllAsync();
+            return result.Select(prosumer => _dtoFactory.CreateDto(prosumer));
         }
 
         // GET: api/Prosumers/5
@@ -35,65 +41,58 @@ namespace ProsumerInfo.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            var prosumer = await _context.Prosumers.SingleOrDefaultAsync(m => m.Id == id);
+            
+            var prosumer = await _unitOfWork.Prosumers.GetAsync(id);
 
             if (prosumer == null)
             {
                 return NotFound();
             }
 
-            return Ok(prosumer);
+            return Ok(_dtoFactory.CreateFullDto(prosumer));
         }
 
         // PUT: api/Prosumers/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProsumer([FromRoute] int id, [FromBody] Prosumer prosumer)
+        public async Task<IActionResult> PutProsumer([FromRoute] int id, [FromBody] ProsumerFullDto prosumerDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != prosumer.Id)
+            if (id != prosumerDto.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(prosumer).State = EntityState.Modified;
+            var prosumer = DtoToProsumer.GetProsumer(prosumerDto);
 
-            try
+            if (_unitOfWork.Prosumers.Update(prosumer, id) == null)
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProsumerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+
+            await _unitOfWork.CommitAsync();
 
             return NoContent();
         }
 
         // POST: api/Prosumers
         [HttpPost]
-        public async Task<IActionResult> PostProsumer([FromBody] Prosumer prosumer)
+        public async Task<IActionResult> PostProsumer([FromBody] ProsumerFullDto prosumerDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Prosumers.Add(prosumer);
-            await _context.SaveChangesAsync();
+            var prosumer = DtoToProsumer.GetProsumer(prosumerDto);
 
-            return CreatedAtAction("GetProsumer", new { id = prosumer.Id }, prosumer);
+            _unitOfWork.Prosumers.Add(prosumer);
+            await _unitOfWork.CommitAsync();
+
+            return CreatedAtAction("GetProsumer", new { id = prosumer.Id }, _dtoFactory.CreateFullDto(prosumer));
         }
 
         // DELETE: api/Prosumers/5
@@ -105,21 +104,27 @@ namespace ProsumerInfo.Controllers
                 return BadRequest(ModelState);
             }
 
-            var prosumer = await _context.Prosumers.SingleOrDefaultAsync(m => m.Id == id);
+            var prosumer = await _unitOfWork.Prosumers.GetAsync(id);
             if (prosumer == null)
             {
                 return NotFound();
             }
 
-            _context.Prosumers.Remove(prosumer);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Prosumers.Remove(prosumer);
+            await _unitOfWork.CommitAsync();
 
             return Ok(prosumer);
         }
+    }
 
-        private bool ProsumerExists(int id)
+    internal static class DtoToProsumer
+    {
+        public static Prosumer GetProsumer(ProsumerFullDto dto)
         {
-            return _context.Prosumers.Any(e => e.Id == id);
+            var prosumer = new Prosumer(dto.PublicKey, dto.Type,
+                    new SmartMeter(dto.SmartMeter.GeneratedPower, dto.SmartMeter.UsedPower))
+                { Id = dto.Id };
+            return prosumer;
         }
     }
 }

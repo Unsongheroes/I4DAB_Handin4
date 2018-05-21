@@ -6,23 +6,15 @@ namespace ProsumerInfo.Interfaces
 {
     public interface IUnitOfWork
     {
-        DbResult Commit();
-        Task<DbResult> CommitAsync();
+        IDbResult Commit();
+        Task<IDbResult> CommitAsync();
         IProsumerRepository Prosumers { get; }
     }
 
-    public struct DbResult
+    public interface IDbResult
     {
-        public DbStatusCode StatusCode { get; }
-        public object Error { get; }
-
-        public DbResult(DbStatusCode status, object error)
-        {
-            StatusCode = status;
-            Error = error;
-        }
-
-        public DbResult(DbStatusCode status) : this(status, null) { }
+        DbStatusCode StatusCode { get; }
+        object Error { get; }
     }
 
     public enum DbStatusCode

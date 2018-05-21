@@ -18,7 +18,7 @@ namespace ProsumerInfo.Data
             Context = context;
         }
 
-        public DbResult Commit()
+        public IDbResult Commit()
         {
             try
             {
@@ -44,7 +44,7 @@ namespace ProsumerInfo.Data
             }
         }
 
-        public async Task<DbResult> CommitAsync()
+        public async Task<IDbResult> CommitAsync()
         {
             try
             {
@@ -71,5 +71,17 @@ namespace ProsumerInfo.Data
         }
 
         public IProsumerRepository Prosumers => _prosumers ?? (_prosumers = new ProsumerRepository(Context));
+
+        private class DbResult : IDbResult
+        {
+            public DbStatusCode StatusCode { get; }
+            public object Error { get; }
+
+            public DbResult(DbStatusCode status, object error = null)
+            {
+                StatusCode = status;
+                Error = error;
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace TraderInfo.Controllers
     [Route("api/Transaction")]
     public class TransactionController : Controller
     {
-        private TransactionRepository _transactionContext = new TransactionRepository();
+        private readonly TransactionRepository _transactionContext;
 
         public TransactionController(TransactionRepository context)
         {

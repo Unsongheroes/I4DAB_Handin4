@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using TraderInfo.Data;
+using TraderInfo.Interfaces;
+using TraderInfo.Models;
 
 namespace TraderInfo
 {
@@ -23,7 +26,9 @@ namespace TraderInfo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-                
+
+            services.AddTransient<TransactionRepository>();
+
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {

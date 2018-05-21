@@ -73,7 +73,9 @@ namespace ProsumerInfo.Controllers
                 return NotFound();
             }
 
-            await _unitOfWork.CommitAsync();
+            var dbResult = await _unitOfWork.CommitAsync();
+            if (dbResult.StatusCode != DbStatusCode.Success)
+                return BadRequest(dbResult.Error);
 
             return NoContent();
         }
@@ -90,14 +92,9 @@ namespace ProsumerInfo.Controllers
             var prosumer = DtoToProsumer.GetProsumer(prosumerDto);
             prosumer = _unitOfWork.Prosumers.Add(prosumer);
 
-            try
-            {
-                await _unitOfWork.CommitAsync();
-            }
-            catch (Exception e) // Incase the public key already exists
-            {
-                return BadRequest(e);
-            }
+            var dbResult = await _unitOfWork.CommitAsync();
+            if (dbResult.StatusCode != DbStatusCode.Success)
+                return BadRequest(dbResult.Error);
 
             return CreatedAtAction("GetProsumer", new { id = prosumer.Id }, _dtoFactory.CreateFullDto(prosumer));
         }
@@ -117,7 +114,9 @@ namespace ProsumerInfo.Controllers
                 return NotFound();
             }
 
-            await _unitOfWork.CommitAsync();
+            var dbResult = await _unitOfWork.CommitAsync();
+            if (dbResult.StatusCode != DbStatusCode.Success)
+                return BadRequest(dbResult.Error);
 
             return Ok(_dtoFactory.CreateDto(prosumer));
         }

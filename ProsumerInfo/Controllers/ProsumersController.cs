@@ -68,7 +68,7 @@ namespace ProsumerInfo.Controllers
 
             var prosumer = DtoToProsumer.GetProsumer(prosumerDto);
 
-            if (_unitOfWork.Prosumers.Update(prosumer, id) == null)
+            if (_unitOfWork.Prosumers.Update(prosumer) == null)
             {
                 return NotFound();
             }

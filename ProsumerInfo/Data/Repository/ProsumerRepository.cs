@@ -45,14 +45,10 @@ namespace ProsumerInfo.Data.Repository
         public Prosumer Remove(int key)
         {
             var target = Context.Set<Prosumer>().SingleOrDefault(p => p.Id == key);
-            return Remove(target);
-        }
 
-        private new Prosumer Remove(Prosumer entity)
-        {
-            if (entity != null)
+            if (target != null)
             {
-                return base.Remove(entity);
+                return base.Remove(target);
             }
 
             return null;

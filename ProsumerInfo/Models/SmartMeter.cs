@@ -16,8 +16,8 @@ namespace ProsumerInfo.Models
 
         public SmartMeter(int generatedPower, int usedPower)
         {
-            _generatedPower = generatedPower > 0 ? generatedPower : throw new ArgumentOutOfRangeException(nameof(generatedPower));
-            _usedPower = usedPower > 0 ? usedPower : throw new ArgumentOutOfRangeException(nameof(usedPower));
+            _generatedPower = generatedPower >= 0 ? generatedPower : throw new ArgumentOutOfRangeException(nameof(generatedPower));
+            _usedPower = usedPower >= 0 ? usedPower : throw new ArgumentOutOfRangeException(nameof(usedPower));
         }
 
         public void AddGenerated(int amount)

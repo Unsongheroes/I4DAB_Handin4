@@ -9,6 +9,12 @@ namespace ProsumerInfo.Models
 {
     public class Prosumer
     {
+        public enum ProsumerType
+        {
+            Private,
+            Company
+        }
+
         //primary key
         public int Id { get; set; }
         //bit coin key
@@ -18,14 +24,23 @@ namespace ProsumerInfo.Models
       
         public SmartMeter SmartMeter { get; private set; }
 
-        public Prosumer(string publicKey, string type, SmartMeter smartMeter)
+        public Prosumer(string publicKey, ProsumerType type, SmartMeter smartMeter)
         {
-            PublicKey = publicKey ?? throw new ArgumentNullException(nameof(publicKey));
-            Type = type ?? throw new ArgumentNullException(nameof(type));
             SmartMeter = smartMeter ?? throw new ArgumentNullException(nameof(smartMeter));
+            SetPublicKey(publicKey);
+            SetType(type);
         }
 
-        [JsonConstructor]
+        public void SetType(ProsumerType type)
+        {
+            Type = type == ProsumerType.Private ? "Private" : "Company";
+        }
+
+        public void SetPublicKey(string publicKey)
+        {
+            PublicKey = publicKey ?? throw new ArgumentNullException(nameof(publicKey));
+        }
+
         private Prosumer()
         { }
     }

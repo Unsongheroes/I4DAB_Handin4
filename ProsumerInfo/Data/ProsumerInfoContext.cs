@@ -22,6 +22,9 @@ namespace ProsumerInfo.Data
             modelBuilder.Entity<SmartMeter>().Property(s => s.UsedPower).HasField("_usedPower")
                 .UsePropertyAccessMode(PropertyAccessMode.Field);
 
+            modelBuilder.Entity<Prosumer>().HasIndex(p => p.PublicKey).IsUnique();
+            modelBuilder.Entity<Prosumer>().Property(p => p.PublicKey).IsRequired();
+
         }
 
         public DbSet<ProsumerInfo.Models.Prosumer> Prosumers { get; set; }

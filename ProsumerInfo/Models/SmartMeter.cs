@@ -7,6 +7,9 @@ namespace ProsumerInfo.Models
         private int _generatedPower;
         private int _usedPower;
 
+        public int ProsumerId { get; set; }
+        public Prosumer Prosumer { get; set; }
+        
         public int Id { get; set; }
         public int GeneratedPower => _generatedPower;
         public int UsedPower => _usedPower;
@@ -31,5 +34,6 @@ namespace ProsumerInfo.Models
 
         private SmartMeter()
         { }
+
     }
 }

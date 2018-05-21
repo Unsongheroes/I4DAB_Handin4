@@ -90,7 +90,15 @@ namespace ProsumerInfo.Controllers
             var prosumer = DtoToProsumer.GetProsumer(prosumerDto);
 
             _unitOfWork.Prosumers.Add(prosumer);
-            await _unitOfWork.CommitAsync();
+
+            try
+            {
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
 
             return CreatedAtAction("GetProsumer", new { id = prosumer.Id }, _dtoFactory.CreateFullDto(prosumer));
         }
@@ -104,13 +112,12 @@ namespace ProsumerInfo.Controllers
                 return BadRequest(ModelState);
             }
 
-            var prosumer = await _unitOfWork.Prosumers.GetAsync(id);
+            var prosumer = _unitOfWork.Prosumers.Remove(id);
             if (prosumer == null)
             {
                 return NotFound();
             }
 
-            _unitOfWork.Prosumers.Remove(prosumer);
             await _unitOfWork.CommitAsync();
 
             return Ok(_dtoFactory.CreateDto(prosumer));
@@ -121,9 +128,10 @@ namespace ProsumerInfo.Controllers
     {
         public static Prosumer GetProsumer(ProsumerFullDto dto)
         {
-            var prosumer = new Prosumer(dto.PublicKey, dto.Type,
+            var type = dto.Type == "Company" ? Prosumer.ProsumerType.Company : Prosumer.ProsumerType.Private; 
+            var prosumer = new Prosumer(dto.PublicKey, type,
                     new SmartMeter(dto.SmartMeter.GeneratedPower, dto.SmartMeter.UsedPower))
-                { Id = dto.Id };
+            { Id = dto.Id };
             return prosumer;
         }
     }

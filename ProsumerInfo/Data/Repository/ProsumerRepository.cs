@@ -12,15 +12,30 @@ namespace ProsumerInfo.Data.Repository
         {
         }
 
+        public override Prosumer Add(Prosumer prosumer)
+        {
+            prosumer.Id = 0;
+            return Context.Set<Prosumer>().Add(prosumer).Entity;
+        }
+
+        public Prosumer Update(Prosumer entity)
+        {
+            return Update(entity, null);
+        }
+
+
+
         public override Prosumer Update(Prosumer entity, object key)
         {
-            var target = Context.Set<Prosumer>().Where(p => p.Id == entity.Id).Include(p => p.SmartMeter)
-                .SingleOrDefault();
+            var target = Context.Set<Prosumer>().Include(p => p.SmartMeter)
+                .SingleOrDefault(p => p.Id == entity.Id);
 
             if (target != null)
             {
                 entity.SmartMeter.Id = target.SmartMeter.Id;
-                // Update parent
+                entity.SmartMeter.Prosumer = target.SmartMeter.Prosumer;
+                entity.SmartMeter.ProsumerId = target.SmartMeter.ProsumerId;
+  
                 Context.Entry(target).CurrentValues.SetValues(entity);
                 Context.Entry(target.SmartMeter).CurrentValues.SetValues(entity.SmartMeter);
                 return target;
@@ -29,15 +44,17 @@ namespace ProsumerInfo.Data.Repository
             return null;
         }
 
-        public override Prosumer Remove(Prosumer entity)
+        public Prosumer Remove(int key)
         {
-            var target = Context.Set<Prosumer>().Where(p => p.Id == entity.Id).Include(p => p.SmartMeter)
-                .SingleOrDefault();
+            var target = Context.Set<Prosumer>().SingleOrDefault(p => p.Id == key);
+            return Remove(target);
+        }
 
-            if (target != null)
+        private new Prosumer Remove(Prosumer entity)
+        {
+            if (entity != null)
             {
-                Context.Set<SmartMeter>().Remove(target.SmartMeter);
-                return Context.Set<Prosumer>().Remove(entity).Entity;
+                return base.Remove(entity);
             }
 
             return null;

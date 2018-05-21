@@ -11,9 +11,10 @@ using System;
 namespace ProsumerInfo.Migrations
 {
     [DbContext(typeof(ProsumerInfoContext))]
-    partial class ProsumerInfoContextModelSnapshot : ModelSnapshot
+    [Migration("20180521125456_PublicKeyIsUniqueAndNonNullable")]
+    partial class PublicKeyIsUniqueAndNonNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

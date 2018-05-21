@@ -11,9 +11,10 @@ using System;
 namespace ProsumerInfo.Migrations
 {
     [DbContext(typeof(ProsumerInfoContext))]
-    partial class ProsumerInfoContextModelSnapshot : ModelSnapshot
+    [Migration("20180521123056_updatedModelOneToOne")]
+    partial class updatedModelOneToOne
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,15 +26,11 @@ namespace ProsumerInfo.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("PublicKey")
-                        .IsRequired();
+                    b.Property<string>("PublicKey");
 
                     b.Property<string>("Type");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PublicKey")
-                        .IsUnique();
 
                     b.ToTable("Prosumers");
                 });

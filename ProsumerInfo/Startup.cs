@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using ProsumerInfo.Data;
 using ProsumerInfo.Interfaces;
 using ProsumerInfo.Models;
+using ProsumerInfo.Models.Dtos;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace ProsumerInfo
@@ -36,13 +37,11 @@ namespace ProsumerInfo
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
 
-
             var sp = services.BuildServiceProvider();
             services.AddScoped<IUnitOfWork>(uow => new UnitOfWork(sp.GetRequiredService<ProsumerInfoContext>()));
+            services.AddScoped<IDtoFactory, DtoFactory>();
         }
-
-       
-
+      
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {

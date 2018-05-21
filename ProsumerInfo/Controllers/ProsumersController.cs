@@ -19,10 +19,10 @@ namespace ProsumerInfo.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDtoFactory _dtoFactory;
 
-        public ProsumersController(IUnitOfWork unitOfWork)
+        public ProsumersController(IUnitOfWork unitOfWork, IDtoFactory factory)
         {
             _unitOfWork = unitOfWork;
-            _dtoFactory = new DtoFactory();
+            _dtoFactory = factory;
         }
 
         // GET: api/Prosumers
@@ -88,14 +88,13 @@ namespace ProsumerInfo.Controllers
             }
 
             var prosumer = DtoToProsumer.GetProsumer(prosumerDto);
-
-            _unitOfWork.Prosumers.Add(prosumer);
+            prosumer = _unitOfWork.Prosumers.Add(prosumer);
 
             try
             {
                 await _unitOfWork.CommitAsync();
             }
-            catch (Exception e)
+            catch (Exception e) // Incase the public key already exists
             {
                 return BadRequest(e);
             }

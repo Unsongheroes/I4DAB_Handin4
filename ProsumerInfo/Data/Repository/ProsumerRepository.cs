@@ -23,8 +23,6 @@ namespace ProsumerInfo.Data.Repository
             return Update(entity, null);
         }
 
-
-
         public override Prosumer Update(Prosumer entity, object key)
         {
             var target = Context.Set<Prosumer>().Include(p => p.SmartMeter)

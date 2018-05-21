@@ -113,7 +113,7 @@ namespace ProsumerInfo.Controllers
             _unitOfWork.Prosumers.Remove(prosumer);
             await _unitOfWork.CommitAsync();
 
-            return Ok(prosumer);
+            return Ok(_dtoFactory.CreateDto(prosumer));
         }
     }
 

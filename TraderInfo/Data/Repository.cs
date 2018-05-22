@@ -89,10 +89,21 @@ namespace TraderInfo.Data
             return (T) (dynamic) document;
         }
 
-        public async Task<T> DeleteItemAsync(string id)
+        public async Task<string> DeleteItemAsync(string id)
         {
-            Document document = await Client.DeleteDocumentAsync(UriFactory.CreateDocumentUri(NewDatabaseId, NewCollectionId, id));
-            return (T) (dynamic) document;
+            try
+            {
+                var document = await Client.DeleteDocumentAsync(UriFactory.CreateDocumentUri(NewDatabaseId, NewCollectionId, id));
+                return id;
+            }
+            catch (DocumentClientException e)
+            {
+                if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    return null;
+
+                throw;
+            }
+            
         }
 
         #region Creation

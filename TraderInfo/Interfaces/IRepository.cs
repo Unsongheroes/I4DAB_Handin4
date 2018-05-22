@@ -16,7 +16,7 @@ namespace TraderInfo.Interfaces
 
         Task<T> CreateItemAsync(T item);
 
-        Task<T> DeleteItemAsync(string id);
+        Task<string> DeleteItemAsync(string id);
 
     }
 }
